@@ -8,8 +8,8 @@ Pagina HTML unica, da aprire nel browser (anche offline e da cellulare) o da usa
 
 Nulla viene salvato né inviato: vedi [Privacy](#privacy).
 
-* **Usalo online**: <https://baskin-software.github.io/generatore-provvedimenti-disciplinari-baskin/> (versione di prova: <https://baskin-software.github.io/generatore-provvedimenti-disciplinari-baskin/beta/>)
-* **Codice sorgente**: <https://github.com/baskin-software/generatore-provvedimenti-disciplinari-baskin> (organizzazione GitHub [baskin-software](https://github.com/baskin-software))
+* **Usalo online**: <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/> (versione di prova: <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/beta/>)
+* **Codice sorgente**: <https://github.com/baskinsoftware/generatore-provvedimenti-disciplinari-baskin> (organizzazione GitHub [baskinsoftware](https://github.com/baskinsoftware))
 
 ## File
 
@@ -56,8 +56,8 @@ Gara n. 12 del 18/10/2026 – ROSSI Mario (ASD Esempio), atleta – squalifica p
 
 Il generatore si può usare anche online. L'azione GitHub `.github/workflows/pages.yml` pubblica su GitHub Pages solo `Generatore_Provvedimenti_Baskin.html`, a ogni modifica del file oppure a mano dalla scheda *Actions*:
 
-* la versione del ramo principale (`main`, oppure `master` se `main` non c'è) all'indirizzo del sito, <https://baskin-software.github.io/generatore-provvedimenti-disciplinari-baskin/>;
-* quella del ramo `beta` (se esiste) nella sottocartella `/beta/` (<https://baskin-software.github.io/generatore-provvedimenti-disciplinari-baskin/beta/>), così si può provare una versione nuova senza toccare quella in uso.
+* la versione del ramo principale (`main`, oppure `master` se `main` non c'è) all'indirizzo del sito, <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/>;
+* quella del ramo `beta` (se esiste) nella sottocartella `/beta/` (<https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/beta/>), così si può provare una versione nuova senza toccare quella in uso.
 
 Se il ramo principale non esiste si pubblica solo `beta` e l'indirizzo del sito rimanda a `/beta/`. La preparazione del sito è nello script `.github/workflows/build_site.sh`.
 
@@ -121,6 +121,15 @@ Dove una sanzione colpisce soggetti diversi (es. Tab. F2: Società e allenatore)
 * Il testo va negli appunti solo premendo **Copia**. Può restare nella cronologia degli appunti del sistema (es. `Win+V` in Windows).
 * Se la pagina è pubblicata su un sito, il server che la ospita può registrare i normali dati tecnici di accesso. Da file salvato sul computer non c'è alcun contatto con internet.
 * I provvedimenti contengono dati personali: chi li inserisce, invia o pubblica ne è responsabile (GDPR).
+
+## Versioni
+
+Dalla 26.0 la numerazione segue lo stile di Firefox: solo `MAGGIORE.MINORE`.
+
+* **MAGGIORE** sale a ogni nuova release con novità (26.0, 27.0, 28.0…).
+* **MINORE** sale solo per correzioni puntuali di una release già pubblicata (26.1, 26.2…).
+
+Il numero compare nel piè di pagina del generatore e in `CITATION.cff`. Tutti i file del progetto portano lo stesso numero di versione. Le release precedenti erano numerate 1.0-1.3.
 
 ## Licenza
 
