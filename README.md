@@ -1,6 +1,6 @@
 # Generatore Provvedimenti Disciplinari Baskin
 
-Pagina HTML unica, da aprire nel browser (anche offline e da cellulare) o da usare online, che aiuta il Giudice Unico a scrivere i provvedimenti disciplinari del Baskin:
+Pagina HTML unica, da aprire nel browser (anche offline e da cellulare), da usare online o da installare come app (PWA), che aiuta il Giudice Unico a scrivere i provvedimenti disciplinari del Baskin:
 
 * **cerca** nel Regolamento Disciplinare (artt. 89-158 del Regolamento Tecnico Nazionale della Disciplina Baskin 2026) e tra 160 **provvedimenti tipo** già formulati sul testo del regolamento, con articolo, comma, tabella e sanzione;
 * **compone** la riga del provvedimento con gara, destinatario, parti variabili e aggiunte facoltative;
@@ -15,13 +15,17 @@ Nulla viene salvato né inviato: vedi [Privacy](#privacy).
 
 | File | Contenuto |
 | --- | --- |
-| `Generatore_Provvedimenti_Baskin.html` | Il generatore (unico file, nessuna dipendenza) |
+| `pwa/index.html` | Il generatore (unico file, nessuna dipendenza: funziona anche da solo, aperto da file) |
+| `pwa/manifest.webmanifest` | Dati per installare il generatore come app (PWA) |
+| `pwa/service-worker.js` | Service worker per l'uso offline della versione online |
+| `pwa/icons/` | Icone dell'app |
 | `README.md` | Questo documento |
 | `LICENSE` | Licenza MIT del codice e ambito delle licenze |
 | `LICENSE-CC-BY-4.0.md` | Licenza CC BY 4.0 dei testi propri |
 | `CITATION.cff` | Come citare il progetto |
 | `.github/workflows/pages.yml` | Azione GitHub che pubblica il generatore su GitHub Pages |
-| `.github/workflows/build_site.sh` | Prepara il sito con le versioni dei rami principale e `beta` |
+| `.github/workflows/release.yml` | Azione GitHub che crea una release (lancio manuale) |
+| `.gitignore` | File esclusi dal repository |
 
 ## Uso
 
@@ -54,18 +58,25 @@ Gara n. 12 del 18/10/2026 – ROSSI Mario (ASD Esempio), atleta – squalifica p
 
 ## Pubblicazione online (GitHub Pages)
 
-Il generatore si può usare anche online. L'azione GitHub `.github/workflows/pages.yml` pubblica su GitHub Pages solo `Generatore_Provvedimenti_Baskin.html`, a ogni modifica del file oppure a mano dalla scheda *Actions*:
+Il generatore si può usare anche online. L'azione GitHub `.github/workflows/pages.yml` pubblica su GitHub Pages il contenuto della cartella `pwa/`, a ogni push sui rami `main` e `beta` oppure a mano dalla scheda *Actions*:
 
-* la versione del ramo principale (`main`, oppure `master` se `main` non c'è) all'indirizzo del sito, <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/>;
-* quella del ramo `beta` (se esiste) nella sottocartella `/beta/` (<https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/beta/>), così si può provare una versione nuova senza toccare quella in uso.
+* il ramo `main` all'indirizzo del sito, <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/>;
+* il ramo `beta` nella sottocartella `/beta/` (<https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/beta/>), così si può provare una versione nuova senza toccare quella in uso;
+* l'indirizzo `/pwa/` e il vecchio `/Generatore_Provvedimenti_Baskin.html` rimandano all'app corrente.
 
-Se il ramo principale non esiste si pubblica solo `beta` e l'indirizzo del sito rimanda a `/beta/`. La preparazione del sito è nello script `.github/workflows/build_site.sh`.
+Se `main` non contiene `pwa/index.html` (per esempio quando contiene solo le Actions) l'indirizzo del sito rimanda a `/beta/`. A ogni pubblicazione il sito viene ricostruito con l'ultimo stato di entrambi i rami, così una pubblicazione non cancella l'altra.
 
-Per attivarla, una sola volta: *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**.
-
-GitHub Pages accetta pubblicazioni solo dal ramo predefinito. Un push sul ramo `beta` rilancia quindi l'azione sul ramo predefinito, che ricostruisce il sito leggendo l'HTML da tutti i rami, senza modificare le regole di protezione dell'ambiente `github-pages`. Per questo i file in `.github/workflows` devono essere presenti, aggiornati, anche nel ramo predefinito.
+Per attivarla, una sola volta: *Settings* → *Pages* → *Build and deployment* → *Source*: **GitHub Actions**. Perché anche il ramo `beta` possa pubblicare: *Settings* → *Environments* → `github-pages` → *Deployment branches and tags*: aggiungere `beta` (oppure nessuna restrizione).
 
 Anche online tutto resta nel browser: il server di GitHub registra solo i normali dati tecnici di accesso (vedi [Privacy](#privacy)).
+
+### Installazione come app (PWA)
+
+Aperto dal sito, il generatore si può installare come app (menu del browser → *Installa app* o *Aggiungi a schermata Home*) e poi funziona anche senza connessione. Quando è pubblicata una versione nuova, in fondo alla pagina compare l'avviso **Aggiorna**: la pagina non si ricarica da sola, per non perdere il testo in lavorazione. Il ramo `main` (`/`) e il ramo `beta` (`/beta/`) si installano come due app separate.
+
+### Release
+
+L'azione `.github/workflows/release.yml` (*Actions* → *Release* → *Run workflow*) crea una release GitHub: il titolo è il primo titolo del README seguito dal tag (`v` + versione), il testo è il README. Controlla che la versione rispetti la [regola di versioning](#versioni) e segna da sola come pre-release le alpha, beta e RC.
 
 ## Ricerca
 
@@ -115,7 +126,7 @@ Dove una sanzione colpisce soggetti diversi (es. Tab. F2: Società e allenatore)
 
 ## Privacy
 
-* Tutto avviene nel browser: la pagina non invia dati e non fa richieste in rete. Una Content-Security-Policy interna (`default-src 'none'`) blocca connessioni e risorse esterne.
+* Tutto avviene nel browser: la pagina non invia dati. Una Content-Security-Policy interna (`default-src 'none'`) blocca connessioni e risorse esterne; aperta dal sito carica solo i propri file (icone, manifest, service worker), che il browser conserva nella cache per l'uso offline: contengono solo il generatore, mai quello che scrivi.
 * Nessun cookie, localStorage, sessionStorage, IndexedDB o altro archivio del browser; nessuna statistica o tracciamento. Chiudendo o ricaricando la pagina si perde tutto.
 * Completamento automatico e controllo ortografico disattivati in tutte le caselle: il browser non memorizza nomi e testi e non li invia a servizi di correzione online.
 * Il testo va negli appunti solo premendo **Copia**. Può restare nella cronologia degli appunti del sistema (es. `Win+V` in Windows).
@@ -124,16 +135,16 @@ Dove una sanzione colpisce soggetti diversi (es. Tab. F2: Società e allenatore)
 
 ## Versioni
 
-Dalla 26.0 la numerazione segue lo stile di Firefox: solo `MAGGIORE.MINORE`.
+La numerazione segue la *Regola di versioning dei progetti Baskin (v3)*: `AA.M[.P[.W]]` con eventuale suffisso `aN` (alpha), `bN` (beta) o `RCN` (release candidate). Il tag ha il prefisso `v` (es. `v26.0`).
 
-* **MAGGIORE** sale a ogni nuova release con novità (26.0, 27.0, 28.0…).
-* **MINORE** sale solo per correzioni puntuali di una release già pubblicata (26.1, 26.2…).
+* **AA**: anno a due cifre; **M**: release dell'anno; **P** e **W**: correzioni (es. 26.0.1, 26.0.0.1).
+* **aN**, **bN**, **RCN**: pre-release, con N progressivo (es. 26.0b6). Alpha, beta e RC sono sempre pubblicate come pre-release.
 
-Il numero compare nel piè di pagina del generatore e in `CITATION.cff`. Tutti i file del progetto portano lo stesso numero di versione. Le release precedenti erano numerate 1.0-1.3.
+Il numero compare nel piè di pagina del generatore (`APP_VERSION` in `pwa/index.html`), nel nome della cache in `pwa/service-worker.js`, in `CITATION.cff` e nell'intestazione dei file. Le versioni precedenti (1.0-1.3 e 26.0) contano come le prime cinque beta: la prima versione con la nuova regola è la **26.0b6**.
 
 ## Licenza
 
-* **Codice** (`Generatore_Provvedimenti_Baskin.html`, esclusi i testi del regolamento, e script e workflow in `.github`): licenza MIT, vedi `LICENSE`.
+* **Codice** (file in `pwa/`, esclusi i testi del regolamento, e workflow in `.github`): licenza MIT, vedi `LICENSE`.
 * **Testi propri** (formule dei provvedimenti tipo, istruzioni, `README.md`): licenza CC BY 4.0, vedi `LICENSE-CC-BY-4.0.md`.
 * **Testo del Regolamento Disciplinare**: appartiene a EISI (Ente Italiano Sport Inclusivi) ed è riportato così com'è per sola consultazione. Non è coperto da queste licenze e fa fede la versione ufficiale pubblicata da EISI.
 

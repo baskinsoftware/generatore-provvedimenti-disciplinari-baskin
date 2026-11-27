@@ -1,68 +1,101 @@
-# pages.yml by Daniele Lolli (UncleDan) feat. Claude AI - Release 26.0 - 2026-11-20 19-07-06
-# Pubblica su GitHub Pages solo il generatore HTML:
-#   - ramo main (o master) -> https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/
-#   - ramo beta            -> https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/beta/
-# Se il ramo principale non esiste si pubblica solo beta (vedi build_site.sh).
-# GitHub Pages accetta pubblicazioni solo dal ramo predefinito: un push su un
-# altro ramo (es. beta) rilancia questa stessa azione sul ramo predefinito, che
-# ricostruisce il sito leggendo l'HTML da tutti i rami. Cosi' non serve
-# modificare le regole di protezione dell'ambiente github-pages.
-name: Pubblica generatore su GitHub Pages
+# pages.yml by Daniele Lolli (UncleDan) feat. Claude AI - Release 26.0b6 - 2026-11-27 18-26-28
+# Pubblica su GitHub Pages:
+#   - ramo main -> / (radice del sito)
+#   - ramo beta -> /beta/
+# Se main non contiene pwa/index.html, la radice / reindirizza a /beta/.
+# L'indirizzo /pwa/ reindirizza a / (o a /beta/ se main non ha l'app).
+# Il vecchio indirizzo /Generatore_Provvedimenti_Baskin.html (release fino
+# alla 26.0) reindirizza allo stesso modo, così link e segnalibri restano validi.
+# Ad ogni push su uno dei due rami il sito viene ricostruito con l'ultimo
+# stato di entrambi, così una pubblicazione non cancella l'altra.
+name: Deploy to Pages
 
 on:
   push:
-    branches: [main, master, beta]
-    paths:
-      - 'Generatore_Provvedimenti_Baskin.html'
-      - '.github/workflows/pages.yml'
-      - '.github/workflows/build_site.sh'
+    branches: ["main", "beta"]
   workflow_dispatch:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
-  group: pages
+  group: "pages"
   cancel-in-progress: false
 
 jobs:
-  rilancia:
-    name: Rilancia sul ramo predefinito
-    if: github.ref_name != github.event.repository.default_branch
-    runs-on: ubuntu-latest
-    permissions:
-      actions: write
-      contents: read
-    steps:
-      - name: Avvia la pubblicazione dal ramo ${{ github.event.repository.default_branch }}
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh workflow run pages.yml --repo "$GITHUB_REPOSITORY" --ref "${{ github.event.repository.default_branch }}"
-
   deploy:
-    name: Pubblica
-    if: github.ref_name == github.event.repository.default_branch
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout (con tutti i rami)
-        uses: actions/checkout@v4
+      - name: Checkout (tutti i rami)
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
-      - name: Prepara il sito (solo l'HTML)
-        run: bash .github/workflows/build_site.sh _site
-      - name: Configura Pages
+
+      - name: Setup Pages
         uses: actions/configure-pages@v5
-      - name: Carica il sito
+
+      - name: Compone il sito
+        run: |
+          set -e
+          mkdir -p _site
+          has() { git cat-file -e "origin/$1:pwa/index.html" 2>/dev/null; }
+          export_branch() { # ramo destinazione
+            mkdir -p "$2"
+            git archive "origin/$1" pwa | tar -x -C "$2" --strip-components=1
+          }
+          if has main; then
+            export_branch main _site
+            echo "main -> /"
+          fi
+          if has beta; then
+            export_branch beta _site/beta
+            echo "beta -> /beta/"
+          fi
+          if [ ! -f _site/index.html ]; then
+            if [ ! -f _site/beta/index.html ]; then
+              echo "Né main né beta contengono pwa/index.html" >&2; exit 1
+            fi
+            cat > _site/index.html <<'HTML'
+          <!DOCTYPE html>
+          <html lang="it"><head><meta charset="utf-8">
+          <title>Generatore Provvedimenti Disciplinari Baskin</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <meta http-equiv="refresh" content="0; url=beta/">
+          <script>location.replace('beta/');</script></head>
+          <body><p><a href="beta/">Generatore Provvedimenti Disciplinari Baskin – versione beta</a></p></body></html>
+          HTML
+            echo "main senza index.html: / -> /beta/"
+          fi
+          # /pwa/ e vecchio nome del file -> app corrente (conserva #ancora e ?parametri)
+          redirect() { # file destinazione
+            cat > "$1" <<HTML
+          <!DOCTYPE html>
+          <html lang="it"><head><meta charset="utf-8">
+          <title>Generatore Provvedimenti Disciplinari Baskin</title>
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <meta http-equiv="refresh" content="0; url=$2">
+          <script>location.replace('$2' + location.search + location.hash);</script></head>
+          <body><p>Il generatore è qui: <a href="$2">Generatore Provvedimenti Disciplinari Baskin</a></p></body></html>
+          HTML
+          }
+          if has main; then DEST=""; else DEST="beta/"; fi
+          mkdir -p _site/pwa
+          redirect _site/pwa/index.html "../${DEST}"
+          echo "/pwa/ -> /${DEST}"
+          redirect _site/Generatore_Provvedimenti_Baskin.html "./${DEST}"
+          if [ -d _site/beta ]; then redirect _site/beta/Generatore_Provvedimenti_Baskin.html "./"; fi
+          touch _site/.nojekyll
+
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
-      - name: Pubblica
+          path: '_site'
+
+      - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5

@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<!-- Generatore_Provvedimenti_Baskin.html by Daniele Lolli (UncleDan) feat. Claude AI - Release 26.0 - 2026-11-20 19-07-06 -->
+<!-- index.html (Generatore Provvedimenti Disciplinari Baskin) by Daniele Lolli (UncleDan) feat. Claude AI - Release 26.0b6 - 2026-11-27 18-26-28 -->
 <html lang="it">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data:; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: 'self'; manifest-src 'self'; worker-src 'self'; form-action 'none'; base-uri 'none'">
 <title>Generatore Provvedimenti Disciplinari Baskin</title>
+<meta name="theme-color" content="#37474f">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <style>
 :root{--bg:#f5f6f8;--card:#fff;--ink:#1f2933;--mut:#5f6b7a;--line:#d9dee5;--acc:#37474f;--ok:#2e7d32;--err:#c62828;--mark:#ffe082}
 @media (prefers-color-scheme:dark){:root{--bg:#15191e;--card:#1e242b;--ink:#e6e9ed;--mut:#9aa5b1;--line:#333c46;--acc:#90a4ae;--ok:#81c784;--err:#ef9a9a;--mark:#7a5d00}}
@@ -83,6 +87,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 28px}
 @media (prefers-color-scheme:dark){.mwarn{background:#3a2f12;color:#ffe9b0;border-color:#8d6e00;border-left-color:#ffb300}.mwarn svg{fill:#ffb300}}
 .rev{margin:14px 0 0;text-align:center;color:var(--mut);font-size:12.5px}
 .mwarn a,.rev a{color:inherit;text-decoration:underline}
+.upd{margin:10px 0 0;text-align:center;font-size:13.5px}
+.upd button{margin-left:8px}
 @media (max-width:700px){
   body{font-size:16px}
   header{padding:14px 12px 4px}
@@ -180,7 +186,7 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 28px}
 <div>
 <h2 id="avv-t">Avvertenze: dati, privacy e responsabilità</h2>
 <ul>
-<li><b>Tutto avviene nel browser e nulla viene salvato.</b> La pagina non invia dati a nessun server e non fa richieste in rete: una regola di sicurezza interna (Content-Security-Policy) blocca qualsiasi connessione e caricamento di risorse esterne. Non usa cookie, localStorage, sessionStorage, IndexedDB né altri archivi del browser e non contiene statistiche o tracciamenti. Quello che scrivi si perde chiudendo o ricaricando la pagina.</li>
+<li><b>Tutto avviene nel browser e nulla viene salvato.</b> La pagina non invia dati a nessun server: una regola di sicurezza interna (Content-Security-Policy) blocca qualsiasi connessione e risorsa esterna. Aperta dal sito carica solo i propri file (icone, manifest e service worker per l'uso offline e l'installazione come app), che il browser conserva nella cache del sito: contengono solo il generatore, mai quello che scrivi. Non usa cookie, localStorage, sessionStorage, IndexedDB né altri archivi per i tuoi dati e non contiene statistiche o tracciamenti. Quello che scrivi si perde chiudendo o ricaricando la pagina.</li>
 <li><b>Caselle di testo.</b> Completamento automatico e controllo ortografico sono disattivati in tutte le caselle, così il browser non memorizza nomi e testi per suggerirli e non li invia a servizi di correzione online.</li>
 <li><b>Appunti.</b> Il testo va negli appunti solo quando premi <b>Copia</b> e ci resta finché non copi altro; se usi la cronologia degli appunti del sistema (es. <kbd>Win</kbd>+<kbd>V</kbd> in Windows, anche sincronizzata tra dispositivi) può restare lì: svuotala se il computer è condiviso.</li>
 <li><b>Pagina pubblicata in rete.</b> Se apri il generatore da un sito, il server che lo ospita può registrare i normali dati tecnici di accesso (indirizzo IP, browser, ora) secondo la propria informativa: il generatore non vi aggiunge nulla. Usandolo da file salvato sul computer non c'è alcun contatto con internet.</li>
@@ -192,7 +198,8 @@ footer{max-width:1100px;margin:0 auto;padding:0 16px 28px}
 </ul>
 </div>
 </section>
-<p class="rev">Generatore Provvedimenti Disciplinari Baskin · Release 26.0 del 2026-11-20 19-07-06 · © 2026 Daniele Lolli (UncleDan) feat. Claude AI · licenza MIT (codice) e CC BY 4.0 (testi propri) · <a href="https://github.com/baskinsoftware/generatore-provvedimenti-disciplinari-baskin" target="_blank" rel="noopener noreferrer">codice sorgente su GitHub</a></p>
+<p class="rev">Generatore Provvedimenti Disciplinari Baskin · Release <span id="ver">26.0b6</span> del 2026-11-27 18-26-28 · © 2026 Daniele Lolli (UncleDan) feat. Claude AI · licenza MIT (codice) e CC BY 4.0 (testi propri) · <a href="https://github.com/baskinsoftware/generatore-provvedimenti-disciplinari-baskin" target="_blank" rel="noopener noreferrer">codice sorgente su GitHub</a></p>
+<p id="upd" class="upd" hidden>È disponibile una nuova versione del generatore.<button type="button" id="updgo">Aggiorna</button></p>
 </footer>
 
 <script>
@@ -428,6 +435,33 @@ $('copy').onclick=function(){
   if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(t).then(done,fb)}else fb();
 };
 run();
+})();
+</script>
+<script>
+/* =====================================================================
+   Versione installabile (PWA): service worker per l'uso offline.
+   Solo se la pagina arriva da un sito (http/https): aperta da file non fa
+   nulla. Una nuova versione non viene attivata da sola, per non perdere il
+   testo in lavorazione: compare l'avviso "Aggiorna" in fondo alla pagina.
+   Aggiornare APP_VERSION insieme a CACHE_NAME in service-worker.js.
+   ===================================================================== */
+(function(){
+"use strict";
+var APP_VERSION='26.0b6';
+var v=document.getElementById('ver');if(v)v.textContent=APP_VERSION;
+if(!('serviceWorker' in navigator)||!/^https?:$/.test(location.protocol))return;
+var box=document.getElementById('upd'),go=document.getElementById('updgo'),ricarica=false;
+function avvisa(w){if(!w||!navigator.serviceWorker.controller)return;box.hidden=false;go.onclick=function(){
+  var out=document.getElementById('out');
+  if(out&&out.value.trim()&&!confirm('Aggiornando la pagina si ricarica e il testo da copiare si perde. Continuare?'))return;
+  ricarica=true;w.postMessage({type:'SKIP_WAITING'})}}
+navigator.serviceWorker.addEventListener('controllerchange',function(){if(ricarica)location.reload()});
+window.addEventListener('load',function(){
+  navigator.serviceWorker.register('service-worker.js').then(function(reg){
+    if(reg.waiting)avvisa(reg.waiting);
+    reg.addEventListener('updatefound',function(){var n=reg.installing;if(n)n.addEventListener('statechange',function(){if(n.state==='installed')avvisa(n)})});
+  }).catch(function(){});
+});
 })();
 </script>
 </body>
