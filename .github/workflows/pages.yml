@@ -1,4 +1,4 @@
-# pages.yml by Daniele Lolli (UncleDan) feat. Claude AI - Release 26.0b6 - 2026-11-27 18-26-28
+# pages.yml by Daniele Lolli (UncleDan) feat. Claude AI - Release 26.0b7 - 2026-11-28 12-01-50
 # Pubblica su GitHub Pages:
 #   - ramo main -> / (radice del sito)
 #   - ramo beta -> /beta/
@@ -63,11 +63,11 @@ jobs:
             cat > _site/index.html <<'HTML'
           <!DOCTYPE html>
           <html lang="it"><head><meta charset="utf-8">
-          <title>Generatore Provvedimenti Disciplinari Baskin</title>
+          <title>Generatore Provvedimenti Disciplinari Baskin EISI</title>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <meta http-equiv="refresh" content="0; url=beta/">
           <script>location.replace('beta/');</script></head>
-          <body><p><a href="beta/">Generatore Provvedimenti Disciplinari Baskin – versione beta</a></p></body></html>
+          <body><p><a href="beta/">Generatore Provvedimenti Disciplinari Baskin EISI – versione beta</a></p></body></html>
           HTML
             echo "main senza index.html: / -> /beta/"
           fi
@@ -76,11 +76,11 @@ jobs:
             cat > "$1" <<HTML
           <!DOCTYPE html>
           <html lang="it"><head><meta charset="utf-8">
-          <title>Generatore Provvedimenti Disciplinari Baskin</title>
+          <title>Generatore Provvedimenti Disciplinari Baskin EISI</title>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <meta http-equiv="refresh" content="0; url=$2">
           <script>location.replace('$2' + location.search + location.hash);</script></head>
-          <body><p>Il generatore è qui: <a href="$2">Generatore Provvedimenti Disciplinari Baskin</a></p></body></html>
+          <body><p>Il generatore è qui: <a href="$2">Generatore Provvedimenti Disciplinari Baskin EISI</a></p></body></html>
           HTML
           }
           if has main; then DEST=""; else DEST="beta/"; fi
