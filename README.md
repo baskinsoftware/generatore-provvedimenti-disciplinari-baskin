@@ -1,4 +1,4 @@
-# Generatore Provvedimenti Disciplinari Baskin
+# Generatore Provvedimenti Disciplinari Baskin EISI
 
 Pagina HTML unica, da aprire nel browser (anche offline e da cellulare), da usare online o da installare come app (PWA), che aiuta il Giudice Unico a scrivere i provvedimenti disciplinari del Baskin:
 
@@ -8,8 +8,8 @@ Pagina HTML unica, da aprire nel browser (anche offline e da cellulare), da usar
 
 Nulla viene salvato né inviato: vedi [Privacy](#privacy).
 
-* **Usalo online**: <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/> (versione di prova: <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/beta/>)
-* **Codice sorgente**: <https://github.com/baskinsoftware/generatore-provvedimenti-disciplinari-baskin> (organizzazione GitHub [baskinsoftware](https://github.com/baskinsoftware))
+* **Usalo online**: <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin-eisi/> (versione di prova: <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin-eisi/beta/>)
+* **Codice sorgente**: <https://github.com/baskinsoftware/generatore-provvedimenti-disciplinari-baskin-eisi> (organizzazione GitHub [baskinsoftware](https://github.com/baskinsoftware))
 
 ## File
 
@@ -60,8 +60,8 @@ Gara n. 12 del 18/10/2026 – ROSSI Mario (ASD Esempio), atleta – squalifica p
 
 Il generatore si può usare anche online. L'azione GitHub `.github/workflows/pages.yml` pubblica su GitHub Pages il contenuto della cartella `pwa/`, a ogni push sui rami `main` e `beta` oppure a mano dalla scheda *Actions*:
 
-* il ramo `main` all'indirizzo del sito, <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/>;
-* il ramo `beta` nella sottocartella `/beta/` (<https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin/beta/>), così si può provare una versione nuova senza toccare quella in uso;
+* il ramo `main` all'indirizzo del sito, <https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin-eisi/>;
+* il ramo `beta` nella sottocartella `/beta/` (<https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin-eisi/beta/>), così si può provare una versione nuova senza toccare quella in uso;
 * l'indirizzo `/pwa/` e il vecchio `/Generatore_Provvedimenti_Baskin.html` rimandano all'app corrente.
 
 Se `main` non contiene `pwa/index.html` (per esempio quando contiene solo le Actions) l'indirizzo del sito rimanda a `/beta/`. A ogni pubblicazione il sito viene ricostruito con l'ultimo stato di entrambi i rami, così una pubblicazione non cancella l'altra.

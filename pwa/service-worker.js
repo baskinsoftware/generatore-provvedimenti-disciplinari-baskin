@@ -1,6 +1,6 @@
 /* service-worker.js by Daniele Lolli (UncleDan) feat. Claude AI - Release 26.0b6 - 2026-11-27 18-26-28
    =====================================================================
-   Service worker - Generatore Provvedimenti Disciplinari Baskin (PWA)
+   Service worker - Generatore Provvedimenti Disciplinari Baskin EISI (PWA)
    Cache-first per il funzionamento completamente offline.
 
    Una nuova versione resta in attesa finché la pagina non invia il

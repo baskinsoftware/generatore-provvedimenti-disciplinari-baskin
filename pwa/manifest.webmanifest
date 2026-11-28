@@ -1,6 +1,6 @@
 {
-  "name": "Generatore Provvedimenti Disciplinari Baskin",
-  "short_name": "Provvedimenti Baskin",
+  "name": "Generatore Provvedimenti Disciplinari Baskin EISI",
+  "short_name": "Provvedimenti Baskin EISI",
   "description": "Cerca nel Regolamento Disciplinare Baskin, componi i provvedimenti e copia il testo pronto. Funziona offline.",
   "lang": "it",
   "start_url": "./index.html",
