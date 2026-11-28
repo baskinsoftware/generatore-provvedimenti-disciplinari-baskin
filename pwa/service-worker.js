@@ -1,4 +1,4 @@
-/* service-worker.js by Daniele Lolli (UncleDan) feat. Claude AI - Release 26.0b6 - 2026-11-27 18-26-28
+/* service-worker.js by Daniele Lolli (UncleDan) feat. Claude AI - Release 26.0b7 - 2026-11-28 12-01-50
    =====================================================================
    Service worker - Generatore Provvedimenti Disciplinari Baskin EISI (PWA)
    Cache-first per il funzionamento completamente offline.
@@ -15,7 +15,7 @@
    nome effettivo della cache porta lo scope ("...@<scope>") e ogni service
    worker gestisce e ripulisce solo le proprie.
    ===================================================================== */
-const CACHE_NAME = 'generatore-provvedimenti-baskin-v26.0b6';
+const CACHE_NAME = 'generatore-provvedimenti-baskin-v26.0b7';
 const CACHE_PREFIX = 'generatore-provvedimenti-baskin-';
 const SCOPE = self.registration.scope;
 const CACHE = CACHE_NAME + '@' + SCOPE;

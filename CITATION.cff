@@ -5,7 +5,7 @@ authors:
   - family-names: "Lolli"
     given-names: "Daniele"
     alias: "UncleDan"
-version: "26.0b6"
+version: "26.0b7"
 repository-code: "https://github.com/baskinsoftware/generatore-provvedimenti-disciplinari-baskin-eisi"
 url: "https://baskinsoftware.github.io/generatore-provvedimenti-disciplinari-baskin-eisi/"
 license: MIT
